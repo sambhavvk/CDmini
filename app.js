@@ -8,7 +8,7 @@ document.getElementById('parseButton').addEventListener('click', () => {
 });
 
 function parseGrammar(input) {
-    const lines = input.split('\n');
+    const lines = input.split('\n').filter(line => line.trim() !== '');
     const grammar = {};
 
     for (let line of lines) {
