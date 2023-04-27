@@ -26,16 +26,16 @@ function visualizeParsing(parser) {
     const output = document.getElementById('output');
     output.innerHTML = '';
 
-    const firstSetsTable = createTable(parser.firstSets, 'First Sets');
-    const followSetsTable = createTable(parser.followSets, 'Follow Sets');
-    const parseTable = createTable(parser.parseTable, 'Parse Table');
+    const firstSetsTable = createTable('First Sets', parser.firstSets);
+    const followSetsTable = createTable('Follow Sets', parser.followSets);
+    const parseTable = createTable('Parse Table', parser.parseTable);
 
     output.appendChild(firstSetsTable);
     output.appendChild(followSetsTable);
     output.appendChild(parseTable);
 }
 
-function createTable(data, title) {
+function createTable(title, data) {
     const table = document.createElement('table');
     const caption = document.createElement('caption');
     caption.textContent = title;
@@ -51,19 +51,42 @@ function createTable(data, title) {
 
         if (!headerCreated) {
             const headerRow = document.createElement('tr');
-            for (let subKey in data[key]) {
-                const th = document.createElement('th');
-                th.textContent = subKey;
-                headerRow.appendChild(th);
+            const thKey = document.createElement('th');
+            thKey.textContent = 'Non-Terminal';
+            headerRow.appendChild(thKey);
+
+            const thValue = document.createElement('th');
+            thValue.textContent = title === 'Parse Table' ? 'Production' : 'Set';
+            headerRow.appendChild(thValue);
+
+            if (title === 'Parse Table') {
+                const keys = Object.keys(data[key]);
+                for (let subKey of keys) {
+                    const th = document.createElement('th');
+                    th.textContent = subKey;
+                    headerRow.appendChild(th);
+                }
             }
             thead.appendChild(headerRow);
             headerCreated = true;
         }
 
+        const keyCell = document.createElement('td');
+        keyCell.textContent = key;
+        row.appendChild(keyCell);
+
+        if (title !== 'Parse Table') {
+            const setCell = document.createElement('td');
+            setCell.textContent = `{${[...data[key]].join(', ')}}`;
+            row.appendChild(setCell);
+        }
+
         for (let subKey in data[key]) {
-            const cell = document.createElement('td');
-            cell.textContent = data[key][subKey];
-            row.appendChild(cell);
+            if (title === 'Parse Table') {
+                const cell = document.createElement('td');
+                cell.textContent = data[key][subKey];
+                row.appendChild(cell);
+            }
         }
         tbody.appendChild(row);
     }

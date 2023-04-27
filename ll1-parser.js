@@ -163,4 +163,16 @@ class LL1Parser {
     isNonTerminal(symbol) {
         return this.grammar.hasOwnProperty(symbol);
     }
+    displayFirstAndFollowSets() {
+        console.log("First Sets:");
+        for (let nonTerminal in this.firstSets) {
+            console.log(`${nonTerminal}: {${[...this.firstSets[nonTerminal]].join(', ')}}`);
+        }
+    
+        console.log("\nFollow Sets:");
+        for (let nonTerminal in this.followSets) {
+            console.log(`${nonTerminal}: {${[...this.followSets[nonTerminal]].join(', ')}}`);
+        }
+    }
+    
 }        
